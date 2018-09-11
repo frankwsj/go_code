@@ -2,11 +2,17 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	//log on
+	Logger()
+
+	//route
 	router := gin.Default()
 	router.GET("/ping", RetunJson)
 	router.GET("/user/:name", GetName)
@@ -18,6 +24,8 @@ func main() {
 	router.HEAD("/someHead", RetunJson)
 	router.POST("/post", PostName)
 	//router.OPTIONS("/someOptions", options)
+
+	//server start
 	router.Run(":80") // listen and serve on 0.0.0.0:8080
 }
 
@@ -39,8 +47,21 @@ func PostName(c *gin.Context) {
 	message := c.PostForm("message")
 
 	fmt.Printf("id: %s; page: %s; name: %s; message: %s", id, page, name, message)
+	c.JSON(200, gin.H{
+		"id":      id,
+		"page":    page,
+		"name":    name,
+		"message": message,
+	})
 }
 
 func RetunString(c *gin.Context) {
 	c.String(200, "Hello,This is string")
+}
+
+func Logger() {
+	gin.DisableConsoleColor()
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
+
 }
