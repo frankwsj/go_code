@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"        // io.Copy获取http请求状态用;HttpPost
 	"io/ioutil" //处理http获取的数据转换用
 	"log"
@@ -31,6 +32,7 @@ func HttpGet() {
 	}
 	defer response.Body.Close() //请求完了关闭回复主体
 	body, err := ioutil.ReadAll(response.Body)
+	fmt.Println(body)
 	log.Println(string(body))
 }
 
