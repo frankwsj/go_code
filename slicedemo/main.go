@@ -44,4 +44,11 @@ func main() {
 		}
 	}
 	fmt.Println("2d: ", twoD)
+	slice()
+}
+
+func slice() {
+	list1 := make([]int, 4)
+	list1 = append(list1, 2, 3, 4, 5)
+	fmt.Print(list1)
 }
