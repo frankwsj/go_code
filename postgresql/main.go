@@ -23,7 +23,6 @@ func main() {
 	fmt.Println("read action done!")
 	c.Update()
 	fmt.Println("update action done!")
-	c.Read()
 
 }
 
@@ -84,7 +83,7 @@ func (c *appContext) Create() {
 	// get insert id
 	lastInsertId := 0
 	now_str := time.Now().Format("2006-01-02 15:04:05")
-	err := c.db.QueryRow("INSERT INTO userinfo(username,departname,Created) VALUES($1,$2,$3) RETURNING uid", "wangsijun", "软件部", now_str).Scan(&lastInsertId)
+	err := c.db.QueryRow("INSERT INTO userinfo(username,departname,Created) VALUES($1,$2,$3) RETURNING uid", "cruise", "软件部", now_str).Scan(&lastInsertId)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,8 +92,8 @@ func (c *appContext) Create() {
 
 // Read
 func (c *appContext) Read() {
-	//rows, err := c.db.Query("SELECT * FROM userinfo ")
-	rows, err := c.db.Query("SELECT * FROM userinfo where username = 'wangsijun'")
+	rows, err := c.db.Query("SELECT * FROM userinfo ")
+	//rows, err := c.db.Query("SELECT * FROM userinfo where uid = 3")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -104,7 +103,6 @@ func (c *appContext) Read() {
 	for rows.Next() {
 		p := new(userinfo)
 		err := rows.Scan(&p.uid, &p.username, &p.departname, &p.Created)
-		checkErr(err)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -118,7 +116,7 @@ func (c *appContext) Update() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	result, err := stmt.Exec("wangsijun", 1)
+	result, err := stmt.Exec("jack", 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -144,11 +142,4 @@ func (c *appContext) Delete() {
 		log.Fatal(err)
 	}
 	fmt.Println("delete affect rows is ", affectNum)
-}
-
-//hadle error
-func checkErr(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
